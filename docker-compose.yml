@@ -1,0 +1,86 @@
+version: '3.7'
+
+services:
+
+  app:
+    # Build.
+    image: krystalcode/matomo:fpm-alpine
+
+    # Run.
+    container_name: ${APP_ID}_app
+
+    restart: unless-stopped
+
+    # Configure:
+    depends_on:
+      - mysql
+
+    networks:
+      - backend
+      - frontend
+
+    volumes:
+      - app-html:/var/www/html
+      - ./config:/var/www/html/config
+
+  nginx:
+    # Build.
+    image: nginx
+
+    # Run.
+    container_name: ${APP_ID}_nginx
+
+    restart: unless-stopped
+
+    # Configure.
+    depends_on:
+      - app
+
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - VIRTUAL_PORT=80
+      - VIRTUAL_NETWORK=nginx-proxy
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+
+    networks:
+      - frontend
+      - proxy-tier
+
+    volumes:
+      - app-html:/var/www/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+  mysql:
+    # Build.
+    image: percona:5.7.25
+
+    # Run.
+    command: --max_allowed_packet=64M
+    container_name: ${APP_ID}_mysql
+
+    restart: unless-stopped
+
+    # Configure.
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+
+    networks:
+      - backend
+
+    volumes:
+      - ${DOCKER_COMPOSE_VOLUMES_DIR}/${APP_VOLUMES_DIR}/mysql:/var/lib/mysql
+
+volumes:
+  app-html:
+
+networks:
+  backend:
+  frontend:
+
+  proxy-tier:
+    external:
+      name: nginx-proxy
