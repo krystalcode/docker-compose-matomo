@@ -9,6 +9,8 @@ services:
     # Run.
     container_name: ${APP_ID}_app
 
+    read_only: true
+
     restart: unless-stopped
 
     # Configure:
@@ -19,9 +21,15 @@ services:
       - backend
       - frontend
 
+    tmpfs:
+      - /run
+      - /tmp
+      - /var/www/html/tmp
+
     volumes:
       - app-html:/var/www/html
       - ./config:/var/www/html/config
+      - ./misc-user:/var/www/html/misc/user
 
   nginx:
     # Build.
