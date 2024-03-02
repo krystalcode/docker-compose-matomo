@@ -47,6 +47,9 @@ services:
     depends_on:
       - app
 
+    links:
+      - app:app
+
     environment:
       - VIRTUAL_HOST=${APP_VIRTUAL_HOST}
       - VIRTUAL_PORT=80
