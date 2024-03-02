@@ -17,6 +17,9 @@ services:
     depends_on:
       - mysql
 
+    links:
+      - mysql:mysql
+
     networks:
       - backend
       - frontend
