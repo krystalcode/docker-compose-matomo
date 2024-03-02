@@ -25,9 +25,9 @@ services:
       - frontend
 
     tmpfs:
-      - /run
-      - /tmp
-      - /var/www/html/tmp
+      - /run:rw,noexec
+      - /tmp:rw,noexec
+      - /var/www/html/tmp:rw,noexec
 
     volumes:
       - app-html:/var/www/html
