@@ -67,7 +67,7 @@ services:
     image: percona:5.7
 
     # Run.
-    command: --max_allowed_packet=64M
+    command: --max_allowed_packet=64M --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     container_name: ${APP_ID}_mysql
 
     restart: unless-stopped
