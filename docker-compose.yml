@@ -63,6 +63,7 @@ services:
 
     volumes:
       - app-html:/var/www/html
+      - ./misc-user:/var/www/html/misc/user
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
 
   mysql:
