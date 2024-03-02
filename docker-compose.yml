@@ -64,7 +64,7 @@ services:
 
   mysql:
     # Build.
-    image: percona:5.7.25
+    image: percona:5.7
 
     # Run.
     command: --max_allowed_packet=64M
