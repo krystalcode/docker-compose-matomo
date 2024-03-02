@@ -4,7 +4,7 @@ services:
 
   app:
     # Build.
-    image: krystalcode/matomo:fpm-alpine
+    image: matomo:fpm-alpine
 
     # Run.
     container_name: ${APP_ID}_app
